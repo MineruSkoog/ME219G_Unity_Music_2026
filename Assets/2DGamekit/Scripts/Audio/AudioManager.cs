@@ -21,6 +21,7 @@ public class AudioManager : MonoBehaviour
         public StudioEventEmitter musicPause;
         public StudioEventEmitter ambiance;
         public StudioEventEmitter snapShotPause;
+        public StudioEventEmitter musicCave;
     }
     public Emitters eventEmitters;
 
@@ -61,6 +62,8 @@ public class AudioManager : MonoBehaviour
     [Header("Stingers")]
     [SerializeField] private EventReference stingerKeyPickup;
     [SerializeField] private EventReference stingerWeaponPickup;
+   [SerializeField] private EventReference stingerGameOver;
+   [SerializeField] private EventReference stingerPuzzleSolved;
         
     [HideInInspector]
     public bool combatState;
@@ -143,7 +146,7 @@ public class AudioManager : MonoBehaviour
         RuntimeManager.StudioSystem.setParameterByName("Combat", 0f);
         Debug.Log("Timer off");
     }
-
+ 
     public void PlayFootstep(string surface)
     {
         if (playerFootsteps.IsNull)
@@ -170,7 +173,7 @@ public class AudioManager : MonoBehaviour
         playerFootstepInstance.start();
         playerFootstepInstance.release();
     }
-
+  
     public void PlayJump()
     {
         if (playerJump.IsNull)
@@ -313,6 +316,25 @@ public class AudioManager : MonoBehaviour
         Debug.Log("Played stingerKeyPickup");
     }
 
+    public void playPuzzleSolved()
+    {
+        if (stingerPuzzleSolved.IsNull)
+        {
+            Debug.LogWarning("Fmod event not found: stingerPuzzleSolved");
+            return;
+        }
+        RuntimeManager.PlayOneShot(stingerPuzzleSolved);
+    }
+
+    public void playGameOver()
+    {
+        if (stingerGameOver.IsNull)
+        {
+            Debug.LogWarning("Fmod event not found: stingerGameOver");
+            return;
+        }
+        RuntimeManager.PlayOneShot(stingerGameOver);
+    }
     public void PlayWeaponPickup()
     {
         if (stingerWeaponPickup.IsNull)
